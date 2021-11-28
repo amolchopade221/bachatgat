@@ -35,6 +35,10 @@
                         </p>
                     </div>
                     @endif
+                </div>
+                <div class="row mt">
+                    <div class="col-lg-3 col-md-2 col-md-12">
+                    </div>
                     <div class="col-lg-6 col-md-8 col-md-12">
                         <div class="form-panel">
                             <form role="form" class="form-horizontal style-form centered"
@@ -43,6 +47,7 @@
                                 enctype="multipart/form-data">
                                 @csrf
                                 <h3>Open Profile</h3>
+                                <br>
                                 <br>
                                 <div class="form-group">
                                     <label
@@ -62,18 +67,85 @@
                         </div>
                         <!-- /form-panel -->
                     </div>
-                    <!-- /col-lg-12 -->
                 </div>
-                <!-- /row -->
+                <div class="row">
+                    <div class="col-lg-3 col-md-4 col-md-12 mt">
+                        <div class="user-count-panel">
+                            <div class="panel-header">
+                                <h5>Total Users</h5>
+                            </div>
+                            <h1><i class="fa fa-user fa-1x"></i></h1>
+
+                            <h2 style="color: white; font-weight: 200;"> {{ $totalUsers }} </h2>
+                            <br>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-md-12 mt">
+                        <div class="active-user-panel">
+                            <div class="panel-header">
+                                <h5>Total Active Accounts</h5>
+                            </div>
+                            <h1><i class="fa fa-user fa-1x"></i></h1>
+                            <h2 style="color: white;"> {{ $totalActiveAccounts }} </h2>
+                            <br>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-md-12 mt">
+                        <div class="collection-panel">
+                            <div class="panel-header">
+                                <h5>Total Collection</h5>
+                            </div>
+                            <h1><i class="fa fa-money fa-1x"></i></h1>
+                            <h2 style="color: white;"> {{ $totalCollection }} </h2>
+                            <br>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-md-12 mt">
+                        <div class="disbursed-loan-panel">
+                            <div class="panel-header">
+                                <h5>Total Disbursed Loan</h5>
+                            </div>
+                            <h1><i class="fa fa-money fa-1x"></i></h1>
+                            <h2 style="color: white;"> {{ $totalDisbursedLoan }} </h2>
+                            <br>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt">
+                    <div class="col-lg-3 col-md-4 col-md-12 mt">
+                        <div class="collection-panel">
+                            <div class="panel-header">
+                                <h5>Total Pending Loan</h5>
+                            </div>
+                            <h1><i class="fa fa-money fa-1x"></i></h1>
+                            <h2 style="color: white;"> {{ $totalPendingLoan }} </h2>
+                            <br>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-md-12 mt">
+                        <div class="disbursed-loan-panel">
+                            <div class="panel-header">
+                                <h5>Total Recovered Loan</h5>
+                            </div>
+                            <h1><i class="fa fa-money fa-1x"></i></h1>
+                            <h2 style="color: white;"> {{ $totalRecoveredLoan }} </h2>
+                            <br>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-md-12 mt">
+                        <div class="collected-interest-panel">
+                            <div class="panel-header">
+                                <h5>Total Collected Interest</h5>
+                            </div>
+                            <h1><i class="fa fa-money fa-1x"></i></h1>
+                            <h2 style="color: white;"> {{ $totalCollectedInterest }} </h2>
+                            <br>
+                        </div>
+                    </div>
+                </div>
             </section>
         </section>
-        <section class="container-fluid" id="main-content">
 
-            <!-- /row -->
-            <!-- /row -->
-        </section>
-        <!--main content end-->
-        <!--footer start-->
         @include('footer.footer')
         <script src="{{asset('lib/common-scripts.js')}}"></script>
 
@@ -151,5 +223,6 @@
     }
     </script>
 </body>
+
 
 </html>

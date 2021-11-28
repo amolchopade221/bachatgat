@@ -242,7 +242,7 @@
                                                     </div>
                                                     <div class="col-sm-4">
                                                         <h1><i class="fa fa-money"></i></h1>
-                                                        <h3>{{$curr_loan_data->interest}}</h3>
+                                                        <h3>0</h3>
                                                         <h4>Interest</h4>
                                                     </div>
                                                 </div>

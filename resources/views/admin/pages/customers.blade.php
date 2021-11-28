@@ -29,9 +29,9 @@
                                 id="hidden-table-info">
                                 <thead>
                                     <tr>
+                                        <th>Account No</th>
                                         <th>Cust Id</th>
                                         <th>Name</th>
-                                        <th>Account No</th>
                                         <th>Mobile No</th>
                                         <th>Password</th>
                                         <th>Select</th>
@@ -41,7 +41,8 @@
                                     @if($data != 0)
                                     @foreach ($customer_list as $customer_data)
                                     <tr>
-                                        <td>{{$customer_data->id}}
+
+                                        <td>{{$customer_data->acc_no}}
                                             @if(($customer_data->is_active) == 1)
                                             <span
                                                 style="height:8px;width:8px;background-color: #33F508;border-radius: 50%;display: inline-block;"></span>
@@ -51,20 +52,16 @@
 
                                             @endif
                                         </td>
+                                        <td>{{$customer_data->id}}</td>
                                         <td>{{$customer_data->full_name}}</td>
-                                        <td>{{$customer_data->acc_no}}</td>
                                         <td>{{$customer_data->mobile_no}}</td>
                                         <td>{{$customer_data->pass}}</td>
                                         <td><a href="{{url('/profile/'.$customer_data->id)}}" class="btn btn-theme">
                                                 <span>Profile</span>
                                             </a> </td>
-                                        @endforeach
+
                                     </tr>
-                                    @else
-                                    <tr>
-                                        <td colspan="6" class="text-center"
-                                            style="background: lightgrey;color:#000;font-size:18px">Data Not Found</td>
-                                    </tr>
+                                    @endforeach
                                     @endif
 
                                 </tbody>
@@ -106,5 +103,6 @@
     });
     </script>
 </body>
+
 
 </html>

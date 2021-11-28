@@ -110,6 +110,10 @@ class customer_controller extends Controller
         $address = $request->input('address');
         $pass = $request->input('pass');
         try {
+            $customer_data = DB::select('SELECT * FROM customers WHERE `acc_no`=?', [$acount_no]);
+            if (count($customer_data) > 0) {
+                return back()->with('message', 'Your Account Open Successfully.....');
+            }
             $profile = time() . '.' . $request->photo->getClientOriginalExtension();
             $img = $request->photo->move(('profile'), $profile);
             if ($img) {

@@ -79,7 +79,7 @@
                                             <label class="col-lg-4 control-label">Shop Name</label>
                                             <div class="col-lg-8">
                                                 <input type="text" value="{{$cus_data->shop_name}}" name="shop_name"
-                                                    id="shop_name" class="form-control" required>
+                                                    id="shop_name" class="form-control">
                                             </div>
                                         </div>
                                         <div class="form-group">

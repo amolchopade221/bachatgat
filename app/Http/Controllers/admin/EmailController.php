@@ -7,6 +7,8 @@ use App\Mail\Gmail;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
 
 class EmailController extends Controller
 {
@@ -18,51 +20,67 @@ class EmailController extends Controller
 
             $to = $send_to;
             if ($conn_collection_of == 1) {
-                $details = [
-                    'email' => $send_to,
-                    'subject' => 'Confirmation Of Daily Collection',
-                ];
+                $subject = "Confirmation Of Daily Collection";
             } else if ($conn_collection_of == 2) {
-                $details = [
-                    'email' => $send_to,
-                    'subject' => 'Confirmation Of Loan Collection',
-                ];
+                $subject = "Confirmation Of Loan Collection";
             } else {
-                $details = [
-                    'email' => $send_to,
-                    'subject' => 'Confirmation Of Pending Collection'
-                ];
+                $subject = "Confirmation Of Pending Collection";
             }
+            $message = view('admin.email.jagtapbachatgat_mail')->render();
 
-            Mail::to($to)->send(new Gmail($details));
-            // Mail::send('admin.email.jagtapbachatgat_mail', $details, function ($message) use ($details) {
-            //     $message->to($details['email'])
-            //         ->subject($details['subject']);
-            // });
 
-            $request->session()->forget('email');
-            $request->session()->forget('conn_amount');
-            $request->session()->forget('acc_no');
-            $request->session()->forget('time');
-            $request->session()->forget('date');
-            $request->session()->forget('collection_for');
+            require 'PHPMailer/vendor/autoload.php';
+            $mail = new PHPMailer(true);
+            $mail->SMTPDebug = 0;
+            $mail->isSMTP();
+            $mail->SMTPOptions = array(
+                'ssl' => array(
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                    'allow_self_signed' => true
+                )
+            );
+            $mail->Host       = env('EMAIL_HOST');
+            $mail->SMTPAuth   = true;
+            $mail->Username   = env('EMAIL_USERNAME');
+            $mail->Password   = env('EMAIL_PASSWORD');
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port       = 587;
+            $mail->setFrom('jagtapbachatgat.com@gmail.com', 'Jagtap Bachat Gat');
+            $mail->addAddress($to);
+            $mail->isHTML(true);
+            $mail->Subject =  $subject;
+            $mail->Body    = $message;
+            $dt = $mail->send();
 
-            if ($conn_collection_of == 1) {
-                $request->session()->forget('conn_collection_of');
-                $request->session()->put('message', 'Collection Added Successfully.....');
-                return view('admin.pages.collection');
-            } else if ($conn_collection_of == 2) {
-                $request->session()->forget('conn_collection_of');
-                $request->session()->put('message', 'Loan Collection Added Successfully.....');
-                return view('admin.pages.collection');
+            if ($dt) {
+                $request->session()->forget('email');
+                $request->session()->forget('conn_amount');
+                $request->session()->forget('acc_no');
+                $request->session()->forget('time');
+                $request->session()->forget('date');
+                $request->session()->forget('collection_for');
+
+                if ($conn_collection_of == 1) {
+                    $request->session()->forget('conn_collection_of');
+                    $request->session()->put('message', 'Collection Added Successfully.....');
+                    return view('admin.pages.collection');
+                } else if ($conn_collection_of == 2) {
+                    $request->session()->forget('conn_collection_of');
+                    $request->session()->put('message', 'Loan Collection Added Successfully.....');
+                    return view('admin.pages.collection');
+                } else {
+                    $request->session()->forget('conn_collection_of');
+                    $request->session()->put('message', 'Pending Collection Added Successfully.....');
+                    return view('admin.pages.collection');
+                }
             } else {
-                $request->session()->forget('conn_collection_of');
-                $request->session()->put('message', 'Pending Collection Added Successfully.....');
-                return view('admin.pages.collection');
+                echo 'Something went wrong';
             }
         } catch (Exception $e) {
             dd($e->getMessage());
             dd('Something Went Wrong');
         }
     }
+
 }

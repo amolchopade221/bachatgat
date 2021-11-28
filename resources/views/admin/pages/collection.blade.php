@@ -59,7 +59,7 @@
                                     <label class="col-lg-2 col-md-2 col-lg-offset-2 col-md-offset-2 control-label">Cust
                                         Id</label>
                                     <div class="col-lg-4 col-md-4">
-                                        <input type="text" placeholder="Enter The Customer Id" id="customer_id"
+                                        <input type="number" placeholder="Enter The Customer Id" id="customer_id"
                                             name="customer_id" class="form-control" required>
                                     </div>
                                 </div>
@@ -102,7 +102,7 @@
                                     <label
                                         class="col-lg-2 col-md-2 col-lg-offset-2 col-md-offset-2 control-label">Pin</label>
                                     <div class="col-lg-4 col-md-4">
-                                        <input type="text" placeholder="Pin" name="con_pin" id="con_pin"
+                                        <input type="password" placeholder="Pin" name="con_pin" id="con_pin"
                                             class="form-control" required>
                                     </div>
                                 </div>
@@ -143,6 +143,7 @@
 
                 if (response['cuss_data'] != null) {
                     len = response['cuss_data'].length;
+
                 }
 
                 var acc_no = response['cuss_data'][0].acc_no;
@@ -161,6 +162,27 @@
                 console.log(tr_str);
             },
             error(data) {
+                // console.log(data);
+            }
+        });
+    });
+
+    $("#optionsRadios3").click(function() {
+        var customer_id = document.getElementById("customer_id").value;
+        var url = window.location.origin + '/get_pending_loan/' + customer_id;
+        $.ajax({
+            url: url,
+            type: 'get',
+            dataType: 'json',
+            success: function(response) {
+
+                $('#amount').empty();
+
+                var pending_amount = response['loan_data'][0].pending;
+                document.getElementById("amount").value = pending_amount;
+            },
+            error(data) {
+                alert("error");
                 // console.log(data);
             }
         });
@@ -201,5 +223,6 @@
     <script src="lib/form-validation-script.js"></script>
 
 </body>
+
 
 </html>

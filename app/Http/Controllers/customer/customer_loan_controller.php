@@ -48,13 +48,15 @@ class customer_loan_controller extends Controller
         if (count($all_loan_data) != 0) {
             foreach ($all_loan_data as $all_loan) {
                 $customer_id = $all_loan->customer_id;
+                $status = $all_loan->status;
             }
             $customer_data = DB::select('SELECT * FROM customers WHERE `id`=?', [$customer_id]);
             $monthly_loan_statement_data = DB::select('SELECT * FROM `loan_monthly_status` WHERE `loan_no`=? AND `customer_id`=?', [$loan_no, $customer_id]);
+
             if (count($customer_data) == 0) {
                 return back()->with('error', 'Data Not Found.....');
             } else {
-                return view('customer.pages.monthly_loan_statement', array('customer_data' => $customer_data, 'sr' => 0, 'current_loan_data' => $loan_data, 'all_loan_data' => $all_loan_data, 'monthly_loan_statement' => $monthly_loan_statement_data));
+                return view('customer.pages.monthly_loan_statement', array('status' => $status, 'customer_data' => $customer_data, 'sr' => 0, 'current_loan_data' => $loan_data, 'all_loan_data' => $all_loan_data, 'monthly_loan_statement' => $monthly_loan_statement_data));
             }
         } else {
             return back()->with('error', 'Data Not Found.....');

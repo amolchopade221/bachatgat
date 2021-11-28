@@ -40,6 +40,22 @@ class MonthEndOperations extends Command
     public function handle()
     {
         $customer_data = DB::select('SELECT * FROM customers');
+        if (count($customer_data) != 0) {
+            foreach ($customer_data as $cuss_data) {
+                $cuss_id = $cuss_data->id;
+                $is_active = $cuss_data->is_active;
+                $acc_expire_date = $cuss_data->acc_expire_date;
+            }
+            if ($is_active == 1) {
+                $today = Date('d-m-Y');
+                $dateTimestamp1 = strtotime($acc_expire_date);
+                $dateTimestamp2 = strtotime($today);
+                if ($dateTimestamp1 < $dateTimestamp2) {
+                    DB::update('UPDATE `customers` SET `is_active`=? WHERE id = ?', [0, $cuss_id]);
+                }
+            }
+        }
+        $customer_data = DB::select('SELECT * FROM customers');
 
         if (count($customer_data) != 0) {
             foreach ($customer_data as $cuss_data) {
@@ -125,7 +141,7 @@ class MonthEndOperations extends Command
                             $dateTimestamp1 = strtotime($month_end_date);
                             $dateTimestamp2 = strtotime($today);
 
-                            if ($dateTimestamp1 <= $dateTimestamp2) {
+                            if ($dateTimestamp1 < $dateTimestamp2) {
                                 $curr_month_id = $monthly_loan_info->id;
                                 $customer_id = $monthly_loan_info->customer_id;
                                 $account_no = $monthly_loan_info->account_no;
@@ -165,7 +181,7 @@ class MonthEndOperations extends Command
                                         $date->modify('+1 month');
                                         $new_month_start_date = $date->format('d-m-Y');
 
-                                        // echo $new_month_start_date; 
+                                        // echo $new_month_start_date;
                                         $date->modify('-1 day');
                                         $end_date = $date->format('d-m-Y');
                                         $monthly_loan_data = array(
@@ -181,9 +197,9 @@ class MonthEndOperations extends Command
                 }
             }
         }
-        $round_data = array('round_count' => 1, 'win_no' => 1, 'win_x' => 1);
+        // $round_data = array('round_count' => 1, 'win_no' => 1, 'win_x' => 1);
 
-        DB::table('demo')->insert($round_data);
+        // DB::table('demo')->insert($round_data);
         // /usr/local/bin/php /home/zb81qp0pk3rn/admin/artisan schedule:run
     }
 }

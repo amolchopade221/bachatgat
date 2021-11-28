@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Mail;
+use SebastianBergmann\Environment\Console;
 
 class statement_controller extends Controller
 {
@@ -17,6 +18,15 @@ class statement_controller extends Controller
         $customer_data = DB::select('SELECT * FROM customers where id=?', [$id]);
         $cuss_data['cuss_data'] = $customer_data;
         echo json_encode($cuss_data);
+        exit;
+    }
+
+    function get_pending_loan($id)
+    {
+        $pending_loan_amount = DB::select('SELECT `id`,`pending` FROM `bachat_monthly` WHERE `customer_id`=? AND `is_received`=? AND `is_expire`=? ORDER BY id ASC LIMIT ?', [$id, 0, 1, 1]);
+
+        $loan_data['loan_data'] = $pending_loan_amount;
+        echo json_encode($loan_data);
         exit;
     }
 
@@ -53,6 +63,9 @@ class statement_controller extends Controller
                                         $credited_amount = $curr_month_bachat->credited;
                                         $pending_amount = $curr_month_bachat->pending;
                                     }
+                                    // if ($amount > $pending_amount) {
+                                    //         return back()->with('error', 'Please Check Pending Amount.....');
+                                    // }
                                     $new_credited_amount = $credited_amount + $amount;
                                     $new_pending_amount = $pending_amount - $amount;
 
@@ -189,9 +202,13 @@ class statement_controller extends Controller
                                 $pending_amount = $curr_month_bachat->pending;
                                 $penalty = $curr_month_bachat->penalty;
                             }
+
                             $new_credited_amount = $credited_amount + $amount;
                             $new_pending_amount = $pending_amount - $amount;
 
+                            if ($new_pending_amount < 0) {
+                                return back()->with('error', 'Please Check Pending Amount');
+                            }
                             if ($new_pending_amount <= 0) {
                                 $check = DB::update('UPDATE `bachat_monthly` SET `credited`= ?,`pending`=?,	`is_received`=? WHERE id = ?', [$new_credited_amount, 0, 1, $expire_month_id]);
                                 if (!$check) {
@@ -249,6 +266,40 @@ class statement_controller extends Controller
         } catch (Exception $th) {
             dd($th->getMessage());
         }
+    }
+
+    // Function For show todays collection
+    public function show_todays_collection(Request $request)
+    {
+        $today = Date('d-m-Y');
+        $total_collection = DB::select("SELECT SUM(amount) as colle FROM `statement` WHERE `date` = ?",[$today]);
+
+        foreach($total_collection as $data){
+            if($data->colle == null){
+                $total_colle = 0;
+            }else{
+                $total_colle = $data->colle;
+            }
+        }
+
+        $total_loan_collection = DB::select("SELECT SUM(amount) as loan FROM `loan_statement` WHERE `date` = ?",[$today]);
+        foreach($total_loan_collection as $data){
+            if($data->loan == null){
+                $total_loan_colle = 0;
+            }else{
+                $total_loan_colle = $data->loan;
+            }
+        }
+        $todays_collection = DB::select(
+            "SELECT * FROM customers cust
+            LEFT JOIN
+            (SELECT SUM(amount) as coll, customer_id FROM statement sub_stat WHERE sub_stat.date = ? GROUP BY sub_stat.customer_id) as stat
+            ON cust.id = stat.customer_id
+            LEFT JOIN
+            (SELECT SUM(amount) as loan, customer_id FROM loan_statement loan_stat WHERE loan_stat.date = ? GROUP BY loan_stat.customer_id) as loan
+            ON cust.id = loan.customer_id",[$today, $today]);
+
+            return view('admin.pages.todays_collection', array('todays_collection' => $todays_collection, 'total_collection' => $total_colle, 'total_loan_collection' => $total_loan_colle));
     }
 
     // Function For Statement data
@@ -322,16 +373,29 @@ class statement_controller extends Controller
         }
     }
 
-
-    // Function For Calculate Penelty
+     // Function For Calculate Penelty
     public function calculate_penalty($id)
     {
         $penalty_month = DB::select('SELECT * FROM bachat_monthly WHERE `id`=?', [$id]);
         if (count($penalty_month) != 0) {
             foreach ($penalty_month as $prev_month_bachat) {
                 $pending = $prev_month_bachat->pending;
+                $end_date = $prev_month_bachat->end_date;
             }
-            $penalty = (($pending / 100) * 2);
+            $compaire_date = $end_date;
+            $today = Date('d-m-Y');
+            $dateTimestamp1 = strtotime($compaire_date);
+            $dateTimestamp2 = strtotime($today);
+            $pending_months = 0;
+            while ($dateTimestamp1 < $dateTimestamp2) {
+                $pending_months++;
+                $date = new DateTime($compaire_date);
+                $date->modify('+1 month');
+                $compaire_date = $date->format('d-m-Y');
+                $dateTimestamp1 = strtotime($compaire_date);
+            }
+
+            $penalty = (($pending / 100) * $pending_months);
             $check = DB::update('UPDATE `bachat_monthly` SET `penalty`=?,`is_calculate`=? WHERE id = ?', [$penalty, 1, $id]);
             if ($check) {
                 return back()->with('message', 'Penalty Calculated Successfully.....');

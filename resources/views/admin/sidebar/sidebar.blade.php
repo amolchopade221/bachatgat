@@ -94,6 +94,12 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{url('todays_collection')}}">
+                        <i class="fa fa-file-text-o"></i>
+                        <span>Today's Collection</span>
+                    </a>
+                </li>
+                <li>
                     <a href="{{url('new_cust')}}">
                         <i class="fa fa-user-plus"></i>
                         <span>New Account</span>

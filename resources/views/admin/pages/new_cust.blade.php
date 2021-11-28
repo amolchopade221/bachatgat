@@ -90,7 +90,7 @@
                                         <div class="form-group">
                                             <label class="col-lg-4 control-label">Aaddhaar Number</label>
                                             <div class="col-lg-8">
-                                                <input type="text" placeholder="Aadhaar Number" name="aadhaar"
+                                                <input type="number" placeholder="Aadhaar Number" name="aadhaar"
                                                     id="aadhaar" class="form-control">
                                             </div>
                                         </div>
@@ -129,7 +129,7 @@
                                         <div class="form-group">
                                             <label class="col-lg-4 control-label">Bachat Amount</label>
                                             <div class="col-lg-8">
-                                                <input type="text" placeholder="Per Month Bachat Amount"
+                                                <input type="number" placeholder="Per Month Bachat Amount"
                                                     name="bachat_amount" id="bachat_amount" class="form-control">
                                             </div>
                                         </div>
@@ -198,8 +198,6 @@
         var name = document.getElementById("full_name").value;
         var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
         var mobile_no = document.getElementById("mobile").value;
-
-        var aadhaar_no = /^\(?([0-9]{5})\)?[-. ]?([0-9]{5})[-. ]?([0-9]{5})$/;
         var aadhaar = document.getElementById("aadhaar").value;
 
         var pan = document.getElementById("pan").value;
@@ -213,71 +211,70 @@
         var pass = document.getElementById("pass").value;
         var con_pass = document.getElementById("con_pass").value;
         if (mobile_no.match(phoneno)) {
-            if (aadhaar.match(aadhaar_no)) {
-                if (name == '') {
-                    alert('Enter The Full Name');
-                    document.getElementById("full_name").style.borderColor = "red";
-                    document.getElementById("full_name").focus();
-                    return false;
-                } else if (pan == '') {
-                    alert('Enter The Pan Number');
-                    document.getElementById("pan").style.borderColor = "red";
-                    document.getElementById("pan").focus();
-                    return false;
-                } else if (date == '') {
-                    alert('Select Date');
-                    document.getElementById("date").style.borderColor = "red";
-                    document.getElementById("date").focus();
-                    return false;
-                } else if (email == '') {
-                    alert('Enter The Email Address');
-                    document.getElementById("email").style.borderColor = "red";
-                    document.getElementById("email").focus();
-                    return false;
-                } else if (bachat_amount == '') {
-                    alert('Enter The Bachat Amount');
-                    document.getElementById("bachat_amount").style.borderColor = "red";
-                    document.getElementById("bachat_amount").focus();
-                    return false;
-                } else if (address == '') {
-                    alert('Enter The Address');
-                    document.getElementById("address").style.borderColor = "red";
-                    document.getElementById("address").focus();
-                    return false;
-                } else if (photo == '') {
-                    alert('Select Profile');
-                    document.getElementById("photo").style.borderColor = "red";
-                    document.getElementById("photo").focus();
-                    return false;
-                } else if (pass == '') {
-                    alert('Enter The Password');
-                    document.getElementById("pass").style.borderColor = "red";
-                    document.getElementById("pass").focus();
-                    return false;
-                } else if (con_pass == '') {
-                    alert('Enter The Confirm Password');
-                    document.getElementById("con_pass").style.borderColor = "red";
-                    document.getElementById("con_pass").focus();
 
-                    return false;
-                } else if (con_pass != pass) {
-                    alert('Confirm Password Is Wrong');
-                    document.getElementById("con_pass").style.borderColor = "red";
-                    document.getElementById("con_pass").focus();
-                    return false;
-                } else {
-                    var r = confirm("Are You Sure.");
-                    if (r == true) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-            } else {
+            if (name == '') {
+                alert('Enter The Full Name');
+                document.getElementById("full_name").style.borderColor = "red";
+                document.getElementById("full_name").focus();
+                return false;
+            } else if (aadhaar == '') {
                 alert("Entere Valid Aadhaar Number");
                 document.getElementById("aadhaar").style.borderColor = "red";
                 document.getElementById("aadhaar").focus();
                 return false;
+            } else if (pan == '') {
+                alert('Enter The Pan Number');
+                document.getElementById("pan").style.borderColor = "red";
+                document.getElementById("pan").focus();
+                return false;
+            } else if (date == '') {
+                alert('Select Date');
+                document.getElementById("date").style.borderColor = "red";
+                document.getElementById("date").focus();
+                return false;
+            } else if (email == '') {
+                alert('Enter The Email Address');
+                document.getElementById("email").style.borderColor = "red";
+                document.getElementById("email").focus();
+                return false;
+            } else if (bachat_amount == '') {
+                alert('Enter The Bachat Amount');
+                document.getElementById("bachat_amount").style.borderColor = "red";
+                document.getElementById("bachat_amount").focus();
+                return false;
+            } else if (address == '') {
+                alert('Enter The Address');
+                document.getElementById("address").style.borderColor = "red";
+                document.getElementById("address").focus();
+                return false;
+            } else if (photo == '') {
+                alert('Select Profile');
+                document.getElementById("photo").style.borderColor = "red";
+                document.getElementById("photo").focus();
+                return false;
+            } else if (pass == '') {
+                alert('Enter The Password');
+                document.getElementById("pass").style.borderColor = "red";
+                document.getElementById("pass").focus();
+                return false;
+            } else if (con_pass == '') {
+                alert('Enter The Confirm Password');
+                document.getElementById("con_pass").style.borderColor = "red";
+                document.getElementById("con_pass").focus();
+
+                return false;
+            } else if (con_pass != pass) {
+                alert('Confirm Password Is Wrong');
+                document.getElementById("con_pass").style.borderColor = "red";
+                document.getElementById("con_pass").focus();
+                return false;
+            } else {
+                var r = confirm("Are You Sure.");
+                if (r == true) {
+                    return true;
+                } else {
+                    return false;
+                }
             }
         } else {
             alert("Entere Valid Mobile Number");

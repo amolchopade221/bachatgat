@@ -71,7 +71,11 @@
                                             <td>{{$data->monthly_pending_loan}}</td>
                                             <td>{{$data->amount_of_loan_paid_off}}</td>
                                             <td>{{$data->pending_loan}}</td>
+                                            @if($status == 1)
                                             <td>{{$data->interest}}</td>
+                                            @else
+                                            <td>0</td>
+                                            @endif
                                             <td>{{$data->start_date}}</td>
                                             <td>{{$data->end_date}}</td>
                                         </tr>

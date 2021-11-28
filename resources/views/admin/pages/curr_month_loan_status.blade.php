@@ -81,10 +81,11 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <?php $i=1;?>
                                         @if(!empty($loan_statement_data))
                                         @foreach ($loan_statement_data as $data)
                                         <tr>
-                                            <td>{{$data->id}}</td>
+                                            <td><?php echo $i++;?></td>
                                             <td>{{$data->date}}</td>
                                             <td>{{$data->time}}</td>
                                             <td>{{$data->amount}}</td>

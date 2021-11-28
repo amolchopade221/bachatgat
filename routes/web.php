@@ -50,16 +50,17 @@ Route::get('/collection', function () {
     return view('admin.pages.collection');
 })->Middleware(admin_login::class);
 
-
 Route::get("/monthly_expire", [loan_controller::class, 'monthly_expire'])->Middleware(admin_login::class);
-
-
-Route::post("/submit_collection", [statement_controller::class, 'submit_cutomers_collection'])->Middleware(admin_login::class);
 
 Route::get("/get_customer_data/{id}", [statement_controller::class, 'get_customer_info'])->Middleware(admin_login::class);
 
+Route::get("/get_pending_loan/{id}", [statement_controller::class, 'get_pending_loan'])->Middleware(admin_login::class);
+
+Route::post("/submit_collection", [statement_controller::class, 'submit_cutomers_collection'])->Middleware(admin_login::class);
 
 Route::get('/send_email', [EmailController::class, 'sendEmail'])->Middleware(send_email::class);
+
+Route::get("/todays_collection", [statement_controller::class, 'show_todays_collection'])->Middleware(admin_login::class);
 
 Route::get('/new_cust', [customer_controller::class, 'open_new_account'])->Middleware(admin_login::class);
 
