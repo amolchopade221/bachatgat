@@ -37,6 +37,7 @@ class statement_controller extends Controller
             $cuss_id = $request->input('customer_id');
             $collection_of = $request->input('collection');
             $amount = $request->input('amount');
+            $details = $request->input('details');
             $con_pin = $request->input('con_pin');
             $status = "cr";
             $admin_data = DB::select('SELECT * FROM `admin`');
@@ -63,9 +64,9 @@ class statement_controller extends Controller
                                         $credited_amount = $curr_month_bachat->credited;
                                         $pending_amount = $curr_month_bachat->pending;
                                     }
-                                    // if ($amount > $pending_amount) {
-                                    //         return back()->with('error', 'Please Check Pending Amount.....');
-                                    // }
+                                    if ($amount > $pending_amount) {
+                                            return back()->with('error', 'Please Check Pending Amount.....');
+                                    }
                                     $new_credited_amount = $credited_amount + $amount;
                                     $new_pending_amount = $pending_amount - $amount;
 
@@ -88,7 +89,7 @@ class statement_controller extends Controller
                                     $time = Date("h:i:s");
                                     $new_bachat_balance = $old_bachat_balance + $amount;
                                     $statement = array(
-                                        'month_id' => $curr_month_id, 'customer_id' => $cuss_id, 'account_no' => $acc_no, 'amount' => $amount, 'date' => $date, 'time' => $time, 'status' => $status,
+                                        'month_id' => $curr_month_id, 'customer_id' => $cuss_id, 'account_no' => $acc_no, 'amount' => $amount, 'details'=>$details, 'date' => $date, 'time' => $time, 'status' => $status,
                                     );
                                     $check = DB::table('statement')->insert($statement);
                                     if ($check) {
@@ -148,7 +149,7 @@ class statement_controller extends Controller
                                     if ($check) {
                                         $new_loan_interest = $old_loan_interest - $curr_month_interest;
 
-                                        $check = DB::update('UPDATE `loan` SET `pending_loan`= ?, `interest`= ? WHERE id = ?', [$new_pending_loan, $new_loan_interest, $loan_id]);
+                                        $check = DB::update('UPDATE `loan` SET `pending_loan`= ?, `interest`= ?, `is_interest_calculate`=?  WHERE id = ?', [$new_pending_loan, $new_loan_interest, 0, $loan_id]);
                                         if (!$check) {
                                             return back()->with('error', 'Something Went Wrong1.....');
                                         }
@@ -158,7 +159,7 @@ class statement_controller extends Controller
                                 } else {
                                     $check = DB::update('UPDATE `loan_monthly_status` SET `amount_of_loan_paid_off`= ?, `pending_loan`=? WHERE id = ?', [$new_amount_of_loan_paid_off, $new_pending_loan, $monthly_lone_id]);
                                     if ($check) {
-                                        $check = DB::update('UPDATE `loan` SET `pending_loan`= ? WHERE id = ?', [$new_pending_loan, $loan_id]);
+                                        $check = DB::update('UPDATE `loan` SET `pending_loan`= ?, `is_interest_calculate`=? WHERE id = ?', [$new_pending_loan, 0, $loan_id]);
                                         if (!$check) {
                                             return back()->with('error', 'Something Went Wrong4.....');
                                         }
@@ -170,7 +171,7 @@ class statement_controller extends Controller
                                 $date = date("d-m-Y");
                                 $time = Date("h:i:s");
                                 $loan_statement = array(
-                                    'loan_no' => $loan_no, 'customer_id' => $cuss_id, 'month_id' => $monthly_lone_id, 'account_no' => $acc_no, 'amount' => $amount, 'date' => $date,
+                                    'loan_no' => $loan_no, 'customer_id' => $cuss_id, 'month_id' => $monthly_lone_id, 'account_no' => $acc_no, 'amount' => $amount, 'details'=>$details, 'date' => $date,
                                     'time' => $time
                                 );
                                 $check = DB::table('loan_statement')->insert($loan_statement);
@@ -231,7 +232,7 @@ class statement_controller extends Controller
                             $time = Date("h:i:s");
                             $new_bachat_balance = $old_bachat_balance + $amount;
                             $statement = array(
-                                'month_id' => $expire_month_id, 'customer_id' => $cuss_id, 'account_no' => $acc_no, 'amount' => $amount, 'date' => $date,
+                                'month_id' => $expire_month_id, 'customer_id' => $cuss_id, 'account_no' => $acc_no, 'amount' => $amount, 'details'=>$details, 'date' => $date,
                                 'time' => $time, 'status' => $status,
                             );
                             $check = DB::table('statement')->insert($statement);
@@ -297,7 +298,7 @@ class statement_controller extends Controller
             ON cust.id = stat.customer_id
             LEFT JOIN
             (SELECT SUM(amount) as loan, customer_id FROM loan_statement loan_stat WHERE loan_stat.date = ? GROUP BY loan_stat.customer_id) as loan
-            ON cust.id = loan.customer_id",[$today, $today]);
+            ON cust.id = loan.customer_id WHERE cust.is_active =?",[$today, $today,1]);
 
             return view('admin.pages.todays_collection', array('todays_collection' => $todays_collection, 'total_collection' => $total_colle, 'total_loan_collection' => $total_loan_colle));
     }
@@ -515,7 +516,7 @@ class statement_controller extends Controller
     public function get_monthly_statement_data($id)
     {
         $customer_data = DB::select('SELECT * FROM customers WHERE `id`=?', [$id]);
-        $monthly_statement_data = DB::select('SELECT * FROM `bachat_monthly` WHERE `customer_id`=? AND `is_received`=?', [$id, 1]);
+        $monthly_statement_data = DB::select('SELECT * FROM `bachat_monthly` WHERE `customer_id`=?', [$id]);
         if ((count($customer_data) == 0 || ($monthly_statement_data) == 0)) {
             return back()->with('error', 'Data Not Found.....');
         } else {

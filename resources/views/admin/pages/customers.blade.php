@@ -56,9 +56,18 @@
                                         <td>{{$customer_data->full_name}}</td>
                                         <td>{{$customer_data->mobile_no}}</td>
                                         <td>{{$customer_data->pass}}</td>
-                                        <td><a href="{{url('/profile/'.$customer_data->id)}}" class="btn btn-theme">
+                                        <td>
+                                            @if(($customer_data->is_account_ready_to_reuse) == 1)
+                                            <a href="{{url('/reuse_account/'.$customer_data->acc_no)}}"
+                                                class="btn btn-theme">
+                                                <span>Reuse Account</span>
+                                            </a>
+                                            @else
+                                            <a href="{{url('/profile/'.$customer_data->id)}}" class="btn btn-theme">
                                                 <span>Profile</span>
-                                            </a> </td>
+                                            </a>
+                                            @endif
+                                        </td>
 
                                     </tr>
                                     @endforeach
@@ -103,6 +112,7 @@
     });
     </script>
 </body>
+
 
 
 </html>

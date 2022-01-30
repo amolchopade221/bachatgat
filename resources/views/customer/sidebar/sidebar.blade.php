@@ -73,9 +73,11 @@
         <ul class="sidebar-menu mt-5" id="nav-accordion">
             @if(!empty($customer_data))
             @foreach ($customer_data as $cus_data)
-            <p class="centered"><a href="{{url('customers_dashboard')}}"><img
-                        src="{{asset('profile/'.$cus_data->profile)}}" class="img-circle" width="80"></a>
-            </p>
+            <div class="profile-pic">
+                <p class="centered"><a href="{{asset('profile/'.$cus_data->profile)}}"><img
+                            src="{{asset('profile/'.$cus_data->profile)}}" class="img-circle"></a>
+                </p>
+            </div>
             <!-- <h5 class="centered">Shivraj Jagtap</h5> -->
             <br>
             <li>
@@ -99,19 +101,25 @@
             @if(!empty($current_loan_data))
             @foreach ($current_loan_data as $loan_data)
             <li>
-                <a href="{{url('/customer_loan_statement/'.$loan_data->loan_no.'/'.$loan_data->id)}}">
+                <a href="{{url('/customer_loan_statement/'.$loan_data->loan_no.'/'.$cus_data->id)}}">
                     <i class="fa fa fa-calendar"></i>
                     <span>Loan Statement</span>
                 </a>
             </li>
             <li>
-                <a href="{{url('/customer_monthly_loan_statement/'.$loan_data->loan_no.'/'.$loan_data->id)}}">
+                <a href="{{url('/customer_monthly_loan_statement/'.$loan_data->loan_no.'/'.$cus_data->id)}}">
                     <i class="fa fa-calendar-o"></i>
                     <span>Monthly Loan Status</span>
                 </a>
             </li>
             @endforeach
             @endif
+            <li>
+                <a href="{{url('customers_change_profile')}}">
+                    <i class="fa fa-key"></i>
+                    <span>Change Profile</span>
+                </a>
+            </li>
             <li>
                 <a href="{{url('customers_change_pass')}}">
                     <i class="fa fa-key"></i>

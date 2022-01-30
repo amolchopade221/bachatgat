@@ -50,36 +50,50 @@
                             <br>
 
                             <!-- <hr> -->
-                            <div style="overflow-x:auto;">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Sr.No</th>
-                                            <th>Monthly Pending</th>
-                                            <th>Amount Of Loan Paid Off</th>
-                                            <th>Pending Loan</th>
-                                            <th>Interest</th>
-                                            <th>Start Date</th>
-                                            <th>End Date</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if(!empty($monthly_loan_statement))
-                                        @foreach ($monthly_loan_statement as $data)
-                                        <tr>
-                                            <td>{{++$sr}}</td>
-                                            <td>{{$data->monthly_pending_loan}}</td>
-                                            <td>{{$data->amount_of_loan_paid_off}}</td>
-                                            <td>{{$data->pending_loan}}</td>
-                                            <td>{{$data->interest}}</td>
-                                            <td>{{$data->start_date}}</td>
-                                            <td>{{$data->end_date}}</td>
-                                        </tr>
-                                        @endforeach
-                                        @endif
-                                    </tbody>
-                                </table>
-                            </div>
+                            <section class="container-fluid">
+                                <div class="row mb">
+                                    <!-- page start-->
+                                    <div class="content-panel">
+                                        <div class="adv-table" style="overflow-x:auto;">
+                                            <table cellpadding="0" cellspacing="0" border="0"
+                                                class="display table table-bordered" id="hidden-table-info">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Sr.No</th>
+                                                        <th>Monthly Pending</th>
+                                                        <th>Amount Of Loan Paid Off</th>
+                                                        <th>Pending Loan</th>
+                                                        <th>Interest</th>
+                                                        <th>Start Date</th>
+                                                        <th>End Date</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @if(!empty($monthly_loan_statement))
+                                                    @foreach ($monthly_loan_statement as $data)
+                                                    <tr>
+                                                        <td><a href="{{url('/forgot_loan_collection_form/'.$data->id)}}"
+                                                                class="btn btn-theme">
+                                                                <span>{{++$sr}}</span>
+                                                            </a>
+                                                        </td>
+                                                        <td>{{$data->monthly_pending_loan}}</td>
+                                                        <td>{{$data->amount_of_loan_paid_off}}</td>
+                                                        <td>{{$data->pending_loan}}</td>
+                                                        <td>{{$data->interest}}</td>
+                                                        <td>{{$data->start_date}}</td>
+                                                        <td>{{$data->end_date}}</td>
+                                                    </tr>
+                                                    @endforeach
+                                                    @endif
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <!-- page end-->
+                                </div>
+                                <!-- /row -->
+                            </section>
                         </div>
                     </div>
                 </div>
@@ -91,6 +105,25 @@
         @include('footer.footer')
         <!--footer end-->
         <script src="{{asset('lib/common-scripts.js')}}"></script>
+        <script type="text/javascript" language="javascript"
+            src="{{asset('lib/advanced-datatable/js/jquery.dataTables.js')}}"></script>
+        <script type="text/javascript" src="{{asset('lib/advanced-datatable/js/DT_bootstrap.js')}}"></script>
+
+        <!--script for this page-->
+        <script type="text/javascript">
+        $(document).ready(function() {
+            var oTable = $('#hidden-table-info').dataTable({
+                "aoColumnDefs": [{
+                    // "bSortable": false,
+                    "aTargets": [0]
+                }],
+                "aaSorting": [
+                    [0, 'asc']
+                ]
+            });
+
+        });
+        </script>
     </section>
 </body>
 

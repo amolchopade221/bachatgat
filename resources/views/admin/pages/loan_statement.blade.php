@@ -68,32 +68,49 @@
                             <br>
 
                             <!-- <hr> -->
-                            <div style="overflow-x:auto;">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Sr.No</th>
-                                            <th>Transaction Date</th>
-                                            <th>Time</th>
-                                            <th>Amount(Rs.)</th>
-                                            <th>Pending Loan(Rs.)</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if(!empty($loan_statement_data))
-                                        @foreach ($loan_statement_data as $data)
-                                        <tr>
-                                            <td>{{++$sr}}</td>
-                                            <td>{{$data->date}}</td>
-                                            <td>{{$data->time}}</td>
-                                            <td>{{$data->amount}}</td>
-                                            <td>{{($pending=($pending - $data->amount))}}</td>
-                                        </tr>
-                                        @endforeach
-                                        @endif
-                                    </tbody>
-                                </table>
-                            </div>
+                            <section class="container-fluid">
+                                <div class="row mb">
+                                    <!-- page start-->
+                                    <div class="content-panel">
+                                        <div class="adv-table" style="overflow-x:auto;">
+                                            <table cellpadding="0" cellspacing="0" border="0"
+                                                class="display table table-bordered" id="hidden-table-info">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Sr.No</th>
+                                                        <th>Transaction Date</th>
+                                                        <th>Time</th>
+                                                        <th>Amount(Rs.)</th>
+                                                        <th>Pending Loan(Rs.)</th>
+                                                        <th>Details</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @if(!empty($loan_statement_data))
+                                                    @foreach ($loan_statement_data as $data)
+                                                    <tr>
+                                                        <td>{{++$sr}}</td>
+                                                        <td>{{$data->date}}</td>
+                                                        <td>{{$data->time}}</td>
+                                                        <td>{{$data->amount}}</td>
+                                                        <td>{{($pending=($pending - $data->amount))}}</td>
+                                                        <td>{{($data->details)}}</td>
+                                                        <td><a onclick="return myconfirmation()"
+                                                                href="{{url('/cancel_loan_transaction/'.$data->id)}}"
+                                                                class="btn btn-danger btn-xs fa fa-trash-o">
+                                                            </a></td>
+                                                    </tr>
+                                                    @endforeach
+                                                    @endif
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <!-- page end-->
+                                </div>
+                                <!-- /row -->
+                            </section>
                         </div>
                     </div>
                 </div>
@@ -105,6 +122,34 @@
         @include('footer.footer')
         <!--footer end-->
         <script src="{{asset('lib/common-scripts.js')}}"></script>
+        <script type="text/javascript" language="javascript"
+            src="{{asset('lib/advanced-datatable/js/jquery.dataTables.js')}}"></script>
+        <script type="text/javascript" src="{{asset('lib/advanced-datatable/js/DT_bootstrap.js')}}"></script>
+
+        <!--script for this page-->
+        <script type="text/javascript">
+        $(document).ready(function() {
+            var oTable = $('#hidden-table-info').dataTable({
+                "aoColumnDefs": [{
+                    // "bSortable": false,
+                    "aTargets": [0]
+                }],
+                "aaSorting": [
+                    [0, 'asc']
+                ]
+            });
+
+        });
+
+        function myconfirmation() {
+            var r = confirm("Are You Sure.");
+            if (r == true) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        </script>
     </section>
 </body>
 

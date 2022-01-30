@@ -109,6 +109,15 @@
                                 </div>
                                 <div class="form-group">
                                     <label
+                                        class="col-lg-3 col-md-3 col-sm-3 col-lg-offset-1 col-md-offset-1 col-sm-offset-1 control-label">Shares
+                                        Amount</label>
+                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <input type="number" min="0" step="1" placeholder="Enter The Shares Amount"
+                                            name="shares_amount" id="shares_amount" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label
                                         class="col-lg-3 col-md-3 col-sm-3 col-lg-offset-1 col-md-offset-1 col-sm-offset-1 control-label">Pin</label>
                                     <div class="col-lg-6 col-md-6 col-sm-6">
                                         <input type="text" placeholder="Enter The Pin" name="con_pin" id="con_pin"

@@ -21,17 +21,18 @@ class customer_login_controller extends Controller
                 return back()->with('error', 'customers Data Not Found..');
             } else {
                 foreach ($logdata as $data) {
-                    if ($accont_no == $data->acc_no) {
-                        if ($password == $data->pass) {
-                            $request->session()->put('acc_no', $data->acc_no);
-                            return redirect('customers_dashboard')->with($request->session()->get('acc_no'));
-                        } else {
-                            return back()->with('error', 'Password Is Wrong.....');
-                        }
-                    } else {
-                        return back()->with('error', 'accont Number Is Wrong.....');
+                    if($data->is_active == 0){
+                        return back()->with('error', 'Accont Is Closed.....');
+                    }
+                    if($data->status == 1){
+                        return back()->with('error', 'Your Account Is Blocked, Please Contact To Admin.....');
+                    }
+                    if (($accont_no != $data->acc_no) || ($password != $data->pass)) {
+                        return back()->with('error', 'Accont Number $ Password Is Wrong.....');
                     }
                 }
+                $request->session()->put('acc_no', $data->acc_no);
+                return redirect('customers_dashboard')->with($request->session()->get('acc_no'));
             }
         } catch (Exception $e) {
             dd($e->getMessage());

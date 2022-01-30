@@ -50,36 +50,46 @@
                             <br>
 
                             <!-- <hr> -->
-                            <div style="overflow-x:auto;">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Sr.No</th>
-                                            <th>credited Amt</th>
-                                            <th>Pending Amt</th>
-                                            <th>Penalty Amt</th>
-                                            <th>Start Date</th>
-                                            <th>End Date</th>
-                                            <th>Penalty Cr. Date</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if(!empty($monthly_statement_data))
-                                        @foreach ($monthly_statement_data as $data)
-                                        <tr>
-                                            <td>{{++$sr}}</td>
-                                            <td>{{$data->credited}}</td>
-                                            <td>{{$data->pending}}</td>
-                                            <td>{{$data->penalty}}</td>
-                                            <td>{{$data->start_date}}</td>
-                                            <td>{{$data->end_date}}</td>
-                                            <td>{{$data->penalty_credited_date}}</td>
-                                        </tr>
-                                        @endforeach
-                                        @endif
-                                    </tbody>
-                                </table>
-                            </div>
+                            <section class="container-fluid">
+                                <div class="row mb">
+                                    <!-- page start-->
+                                    <div class="content-panel">
+                                        <div class="adv-table" style="overflow-x:auto;">
+                                            <table cellpadding="0" cellspacing="0" border="0"
+                                                class="display table table-bordered" id="hidden-table-info">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Sr.No</th>
+                                                        <th>credited Amt</th>
+                                                        <th>Pending Amt</th>
+                                                        <th>Penalty Amt</th>
+                                                        <th>Start Date</th>
+                                                        <th>End Date</th>
+                                                        <th>Penalty Cr. Date</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @if(!empty($monthly_statement_data))
+                                                    @foreach ($monthly_statement_data as $data)
+                                                    <tr>
+                                                        <td>{{++$sr}}</td>
+                                                        <td>{{$data->credited}}</td>
+                                                        <td>{{$data->pending}}</td>
+                                                        <td>{{$data->penalty}}</td>
+                                                        <td>{{$data->start_date}}</td>
+                                                        <td>{{$data->end_date}}</td>
+                                                        <td>{{$data->penalty_credited_date}}</td>
+                                                    </tr>
+                                                    @endforeach
+                                                    @endif
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <!-- page end-->
+                                </div>
+                                <!-- /row -->
+                            </section>
                         </div>
                     </div>
                 </div>
@@ -91,6 +101,25 @@
         @include('footer.footer')
         <!--footer end-->
         <script src="{{asset('lib/common-scripts.js')}}"></script>
+        <script type="text/javascript" language="javascript"
+            src="{{asset('lib/advanced-datatable/js/jquery.dataTables.js')}}"></script>
+        <script type="text/javascript" src="{{asset('lib/advanced-datatable/js/DT_bootstrap.js')}}"></script>
+
+        <!--script for this page-->
+        <script type="text/javascript">
+        $(document).ready(function() {
+            var oTable = $('#hidden-table-info').dataTable({
+                "aoColumnDefs": [{
+                    // "bSortable": false,
+                    "aTargets": [0]
+                }],
+                "aaSorting": [
+                    [0, 'asc']
+                ]
+            });
+
+        });
+        </script>
     </section>
 
 </body>

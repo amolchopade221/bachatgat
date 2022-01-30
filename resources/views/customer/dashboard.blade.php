@@ -57,7 +57,10 @@
                                 @endif
 
                                 <div class="profile-pic">
-                                    <p><img src="{{asset('profile/'.$cus_data->profile)}}" class="img-circle"></p>
+                                    <a href="{{asset('profile/'.$cus_data->profile)}}">
+                                        <img src="{{asset('profile/'.$cus_data->profile)}}" class="img-circle">
+                                    </a>
+                                    <!-- <p></p> -->
                                     <!-- <p>
                                         <button class="btn btn-theme02"><i class="fa fa-pencil"></i> Edit
                                             Profile</button>
@@ -237,13 +240,14 @@
                                                     </div>
                                                     <div class="col-sm-4">
                                                         <h1><i class="fa fa-money"></i></h1>
-                                                        <h3>{{$curr_loan_data->pending_loan}}</h3>
-                                                        <h4>Pending Loan</h4>
+                                                        <h3>{{$curr_loan_data->amount - $curr_loan_data->pending_loan}}
+                                                        </h3>
+                                                        <h4>Recovered Loans</h4>
                                                     </div>
                                                     <div class="col-sm-4">
                                                         <h1><i class="fa fa-money"></i></h1>
-                                                        <h3>0</h3>
-                                                        <h4>Interest</h4>
+                                                        <h3>{{$curr_loan_data->pending_loan}}</h3>
+                                                        <h4>Pending Loan</h4>
                                                     </div>
                                                 </div>
                                                 <div class="row mt mb">
@@ -260,20 +264,8 @@
                                                 @endforeach
                                                 @else
                                                 <div class="row centered mt mb">
-                                                    <div class="col-sm-4">
-                                                        <h1><i class="fa fa-money"></i></h1>
-                                                        <h3>0</h3>
-                                                        <h4>Loan Amount</h4>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <h1><i class="fa fa-money"></i></h1>
-                                                        <h3>0</h3>
-                                                        <h4>Pending Loan</h4>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <h1><i class="fa fa-money"></i></h1>
-                                                        <h3>0</h3>
-                                                        <h4>Interest</h4>
+                                                    <div class="col-sm-12">
+                                                        <h4>No active loan</h4>
                                                     </div>
                                                 </div>
                                                 @endif
@@ -291,7 +283,7 @@
                                                 @foreach ($current_loan_data as $loan_data)
                                                 <div class="col-md-2">
                                                     <p>
-                                                        <a href="{{url('/customer_loan_statement/'.$loan_data->loan_no.'/'.$loan_data->id)}}"
+                                                        <a href="{{url('/customer_loan_statement/'.$loan_data->loan_no.'/'.$cus_data->id)}}"
                                                             class="btn btn-theme">
                                                             <span>Loan Statement</span>
                                                         </a>
@@ -299,7 +291,7 @@
                                                 </div>
                                                 <div class="col-md-2">
                                                     <p>
-                                                        <a href="{{url('/customer_monthly_loan_statement/'.$loan_data->loan_no.'/'.$loan_data->id)}}"
+                                                        <a href="{{url('/customer_monthly_loan_statement/'.$loan_data->loan_no.'/'.$cus_data->id)}}"
                                                             class="btn btn-theme">
                                                             <span>Monthly Loan Status</span>
                                                         </a>

@@ -77,9 +77,11 @@
     <aside>
         <div id="sidebar" class="nav-collapse ">
             <ul class="sidebar-menu" id="nav-accordion">
-                <p class="centered"><a href="{{url('dashboard')}}"><img src="{{asset('img/shivraj.jpg')}}"
-                            class="img-circle" width="80"></a>
-                </p>
+                <div class="profile-pic">
+                    <p class="centered"><a href="{{url('dashboard')}}"><img src="{{asset('img/shivraj.jpg')}}"
+                                class="img-circle" width="80"></a>
+                    </p>
+                </div>
                 <h5 class="centered">Shivraj Jagtap</h5>
                 <li class="mt">
                     <a href="{{url('dashboard')}}">
@@ -97,6 +99,12 @@
                     <a href="{{url('todays_collection')}}">
                         <i class="fa fa-file-text-o"></i>
                         <span>Today's Collection</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{url('pending_loans')}}">
+                        <i class="fa fa-file-text-o"></i>
+                        <span>Pending Loan's</span>
                     </a>
                 </li>
                 <li>

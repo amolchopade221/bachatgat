@@ -13,16 +13,9 @@
 
 <body>
     <section id="container">
-        <!-- **********************************************************************************************************************************************************
-        TOP BAR CONTENT & NOTIFICATIONS
-        *********************************************************************************************************************************************************** -->
-        <!--header start-->
+
         @include('admin.sidebar.sidebar')
-        <!--sidebar end-->
-        <!-- **********************************************************************************************************************************************************
-        MAIN CONTENT
-        *********************************************************************************************************************************************************** -->
-        <!--main content start-->
+
         <section class="container-fluid" id="main-content">
             <section class="wrapper">
                 @if(Session::has('message'))
@@ -66,38 +59,48 @@
                             </Div>
                             <br>
                             <br>
+                            <section class="container-fluid">
+                                <div class="row mb">
+                                    <!-- page start-->
+                                    <div class="content-panel">
+                                        <div class="adv-table" style="overflow-x:auto;">
+                                            <table cellpadding="0" cellspacing="0" border="0"
+                                                class="display table table-bordered" id="hidden-table-info">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Sr.No</th>
+                                                        <th>Transaction Date</th>
+                                                        <th>Amount(Rs.)</th>
+                                                        <th>Balance(Rs.)</th>
+                                                        <th>Details</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @if(!empty($statement_data))
+                                                    @foreach ($statement_data as $data)
+                                                    <tr>
+                                                        <td>{{++$sr}}</td>
+                                                        <td>{{$data->date}}</td>
+                                                        <td>{{$data->amount}}{{$data->status}}</td>
+                                                        <td>{{($balance=($balance + $data->amount))}}</td>
+                                                        <td>{{$data->details}}</td>
+                                                        <td><a onclick="return myconfirmation()"
+                                                                href="{{url('/cancel_transaction/'.$data->id)}}"
+                                                                class="btn btn-danger btn-xs fa fa-trash-o">
+                                                            </a></td>
+                                                    </tr>
 
-                            <!-- <hr> -->
-                            <div style="overflow-x:auto;">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Sr.No</th>
-                                            <th>Transaction Date</th>
-                                            <th>Amount(Rs.)</th>
-                                            <th>Balance(Rs.)</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if(!empty($statement_data))
-                                        @foreach ($statement_data as $data)
-                                        <tr>
-                                            <td>{{++$sr}}</td>
-                                            <td>{{$data->date}}</td>
-                                            <td>{{$data->amount}}{{$data->status}}</td>
-                                            <td>{{($balance=($balance + $data->amount))}}</td>
-                                            <td><a onclick="return myconfirmation()"
-                                                    href="{{url('/cancel_transaction/'.$data->id)}}"
-                                                    class="btn btn-danger btn-xs fa fa-trash-o">
-                                                </a></td>
-                                        </tr>
-
-                                        @endforeach
-                                        @endif
-                                    </tbody>
-                                </table>
-                            </div>
+                                                    @endforeach
+                                                    @endif
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <!-- page end-->
+                                </div>
+                                <!-- /row -->
+                            </section>
                         </div>
                     </div>
                 </div>
@@ -109,6 +112,10 @@
         @include('footer.footer')
         <!--footer end-->
         <script src="{{asset('lib/common-scripts.js')}}"></script>
+        <script type="text/javascript" language="javascript"
+            src="{{asset('lib/advanced-datatable/js/jquery.dataTables.js')}}"></script>
+        <script type="text/javascript" src="{{asset('lib/advanced-datatable/js/DT_bootstrap.js')}}"></script>
+
         <script>
         function myconfirmation() {
             var r = confirm("Are You Sure.");
@@ -118,6 +125,20 @@
                 return false;
             }
         }
+        </script>
+        <script type="text/javascript">
+        $(document).ready(function() {
+            var oTable = $('#hidden-table-info').dataTable({
+                "aoColumnDefs": [{
+                    // "bSortable": false,
+                    "aTargets": [0]
+                }],
+                "aaSorting": [
+                    [0, 'asc']
+                ]
+            });
+
+        });
         </script>
     </section>
 </body>

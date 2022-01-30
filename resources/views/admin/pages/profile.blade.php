@@ -57,7 +57,8 @@
                                 @endif
 
                                 <div class="profile-pic">
-                                    <p><img src="{{asset('profile/'.$cus_data->profile)}}" class="img-circle"></p>
+                                    <a href="{{asset('profile/'.$cus_data->profile)}}"><img
+                                            src="{{asset('profile/'.$cus_data->profile)}}" class="img-circle"></a>
                                     <!-- <p>
                                         <button class="btn btn-theme02"><i class="fa fa-pencil"></i> Edit
                                             Profile</button>
@@ -192,11 +193,12 @@
                                         <!-- /OVERVIEW -->
                                     </div>
                                     @if(!empty($customer_data))
+                                    @foreach ($customer_data as $cus_data)
+                                    @if(($cus_data->is_active)== 1)
                                     <div class="row">
                                         <!-- /col-md-6 -->
                                         <div class="col-md-12 detailed">
                                             <div class="row centered">
-                                                @foreach ($customer_data as $cus_data)
                                                 <div class="col-md-2">
                                                     <p>
                                                         <a href="{{url('/statement/'.$cus_data->id)}}"
@@ -213,11 +215,12 @@
                                                         </a>
                                                     </p>
                                                 </div>
-                                                @endforeach
                                             </div>
                                         </div>
                                         <!-- /col-md-6 -->
                                     </div>
+                                    @endif
+                                    @endforeach
                                     @endif
 
                                     <!-- /tab-pane -->
@@ -243,17 +246,29 @@
                                                 @foreach ($current_loan_data as $curr_loan_data)
 
                                                 <div class="row centered mt mb">
-                                                    <div class="col-sm-4">
+                                                    <div class="col-sm-3">
                                                         <h1><i class="fa fa-money"></i></h1>
                                                         <h3>{{$curr_loan_data->amount}}</h3>
                                                         <h4>Loan Amount</h4>
                                                     </div>
-                                                    <div class="col-sm-4">
+                                                    <div class="col-sm-3">
+                                                        <h1><i class="fa fa-money"></i></h1>
+                                                        <h3>{{$curr_loan_data->shares_amount}}
+                                                        </h3>
+                                                        <h4>Shares Amount</h4>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <h1><i class="fa fa-money"></i></h1>
+                                                        <h3>{{$curr_loan_data->amount - $curr_loan_data->pending_loan}}
+                                                        </h3>
+                                                        <h4>Recovered Loans</h4>
+                                                    </div>
+                                                    <div class="col-sm-3">
                                                         <h1><i class="fa fa-money"></i></h1>
                                                         <h3>{{$curr_loan_data->pending_loan}}</h3>
                                                         <h4>Pending Loan</h4>
                                                     </div>
-                                                    <div class="col-sm-4">
+                                                    <div class="col-sm-3">
                                                         <h1><i class="fa fa-money"></i></h1>
                                                         <h3>{{$curr_loan_data->interest}}</h3>
                                                         <h4>Interest</h4>
@@ -273,20 +288,8 @@
                                                 @endforeach
                                                 @else
                                                 <div class="row centered mt mb">
-                                                    <div class="col-sm-4">
-                                                        <h1><i class="fa fa-money"></i></h1>
-                                                        <h3>0</h3>
-                                                        <h4>Loan Amount</h4>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <h1><i class="fa fa-money"></i></h1>
-                                                        <h3>0</h3>
-                                                        <h4>Pending Loan</h4>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <h1><i class="fa fa-money"></i></h1>
-                                                        <h3>0</h3>
-                                                        <h4>Interest</h4>
+                                                    <div class="col-sm-12">
+                                                        <h4>No active loan</h4>
                                                     </div>
                                                 </div>
                                                 @endif
@@ -303,6 +306,7 @@
                                             <div class="row centered">
                                                 @if(empty($current_loan_data))
                                                 @foreach ($customer_data as $cus_data)
+                                                @if(($cus_data->is_active)== 1)
                                                 <div class="col-md-2">
                                                     <p>
                                                         <a href="{{url('/give_a_loan/'.$cus_data->id)}}"
@@ -311,20 +315,14 @@
                                                         </a>
                                                     </p>
                                                 </div>
+                                                @endif
                                                 @endforeach
                                                 @else
                                                 @foreach ($current_loan_data as $loan_data)
+
                                                 <div class="col-md-2">
                                                     <p>
-                                                        <a href="{{url('/current_month_status/'.$loan_data->loan_no.'/'.$loan_data->id)}}"
-                                                            class="btn btn-theme">
-                                                            <span>Current Month Status</span>
-                                                        </a>
-                                                    </p>
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <p>
-                                                        <a href="{{url('/loan_statement/'.$loan_data->loan_no.'/'.$loan_data->id)}}"
+                                                        <a href="{{url('/loan_statement/'.$loan_data->loan_no.'/'.$cus_data->id)}}"
                                                             class="btn btn-theme">
                                                             <span>Loan Statement</span>
                                                         </a>
@@ -332,9 +330,17 @@
                                                 </div>
                                                 <div class="col-md-2">
                                                     <p>
-                                                        <a href="{{url('/monthly_loan_statement/'.$loan_data->loan_no.'/'.$loan_data->id)}}"
+                                                        <a href="{{url('/monthly_loan_statement/'.$loan_data->loan_no.'/'.$cus_data->id)}}"
                                                             class="btn btn-theme">
                                                             <span>Monthly Status</span>
+                                                        </a>
+                                                    </p>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <p>
+                                                        <a href="{{url('/calculate_interest/'.$loan_data->id)}}"
+                                                            class="btn btn-theme">
+                                                            <span>Calculate Interest</span>
                                                         </a>
                                                     </p>
                                                 </div>
@@ -418,6 +424,7 @@
                                                 <div class="row centered">
 
                                                     @foreach ($customer_data as $cus_data)
+                                                    @if(($cus_data->is_active)== 1)
                                                     <div class="col-md-2">
                                                         <p>
                                                             <a href="{{url('/edit_profile/'.$cus_data->id)}}"
@@ -428,11 +435,10 @@
                                                     </div>
                                                     <div class="col-md-2">
 
-                                                        @foreach ($customer_data as $cus_data)
                                                         @if(($cus_data->status)== 0)
                                                         <p>
                                                             <a href="{{url('/block/'.$cus_data->id)}}"
-                                                                class="btn btn-theme">
+                                                                class="btn btn-theme04">
                                                                 <span>Block</span>
                                                             </a>
                                                         </p>
@@ -444,11 +450,25 @@
                                                             </a>
                                                         </p>
                                                         @endif
-                                                        @endforeach
-
+                                                    </div>
+                                                    @endif
+                                                    <div class="col-md-2">
+                                                        @if(($cus_data->is_account_ready_to_reuse)== 0)
+                                                        <p id="close_account">
+                                                            <a class="btn btn-theme04">
+                                                                <span>Close Account</span>
+                                                            </a>
+                                                        </p>
+                                                        @elseif(($cus_data->is_account_ready_to_reuse)== 1)
+                                                        <p>
+                                                            <a href="{{url('/reuse_account/'.$cus_data->acc_no)}}"
+                                                                class="btn btn-theme">
+                                                                <span>Reuse Account</span>
+                                                            </a>
+                                                        </p>
+                                                        @endif
                                                     </div>
                                                     @endforeach
-
                                                 </div>
                                             </div>
                                             <!-- /col-md-6 -->
@@ -464,6 +484,52 @@
                         <!-- /col-lg-12 -->
                     </div>
                     <!-- /row -->
+                    <div class="col-lg-12 mt" id="confirmation">
+                        <div class="row content-panel">
+                            <div class="panel-body">
+                                <div class="tab-content">
+                                    <div id="overview" class="tab-pane active">
+                                        <div class="row">
+                                            <form role="form" class="form-horizontal style-form"
+                                                onsubmit="return myconfirmation()"
+                                                action="{{url('close_account/'.$cus_data->id)}}" method="post"
+                                                oncopy="return false" oncut="return false" onpaste="return false"
+                                                enctype="multipart/form-data">
+                                                @csrf
+                                                <div class="centered">
+                                                    <h3>Confirmation</h3>
+                                                </div>
+                                                <br>
+                                                <div class="row">
+                                                    <div class="col-lg-4 col-md-3">
+
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-6" style="text-align: center;">
+                                                        <div class="form-group">
+                                                            <label class="col-lg-4 col-md-4 control-label">Enter
+                                                                Pin</label>
+                                                            <div class="col-lg-8 col-md-8">
+                                                                <input type="password" name="pin" id="pin"
+                                                                    class="form-control" required>
+                                                            </div>
+                                                        </div>
+                                                        <button class="btn btn-theme04" type="submit">Close
+                                                            Account</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <!-- /col-md-6 -->
+                                        </div>
+                                        <!-- /OVERVIEW -->
+                                    </div>
+                                    <!-- /tab-pane -->
+                                </div>
+                                <!-- /tab-content -->
+                            </div>
+                            <!-- /panel-body -->
+                        </div>
+                        <!-- /col-lg-12 -->
+                    </div>
                 </div>
                 <!-- /container -->
             </section>
@@ -471,12 +537,35 @@
         </section>
         <!-- /MAIN CONTENT -->
         <!--main content end-->
+
         <!--footer start-->
         @include('footer.footer')
         <script src="{{asset('lib/common-scripts.js')}}"></script>
+        <script>
+        $(document).ready(function() {
+            $("#confirmation").hide();
+            $("#close_account").click(function() {
+                $("#close_account").hide();
+                $("#confirmation").show();
+            });
+        });
+
+        // function myconfirmation() {
+        //     var r = confirm("Are You Sure.");
+        //     if (r == true) {
+        //         return true;
+        //     } else {
+        //         return false;
+        //     }
+        // }
+        </script>
         <!--footer end-->
     </section>
     <!-- js placed at the end of the document so the pages load faster -->
 </body>
+
+
+
+
 
 </html>

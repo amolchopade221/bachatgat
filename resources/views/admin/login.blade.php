@@ -19,15 +19,16 @@
             <form class="form-login" action="{{url('login_admin')}}" method="post" oncopy="return false"
                 oncut="return false" onpaste="return false">
                 @csrf
-                <h2 class="form-login-heading">sign in now</h2>
+                <h2 class="form-login-heading">Admin <br> <br> sign in now</h2>
                 <div class="login-wrap">
-                    <input type="text" class="form-control" name="username" placeholder=" User ID" autofocus>
+                    <input type="text" class="form-control" name="username" placeholder="Username" autofocus>
                     <br>
                     <input type="password" class="form-control" name="password" placeholder="Password">
                     <br>
                     <button class="btn btn-theme btn-block" type="submit"><i class="fa fa-lock"></i>
                         Log In</button>
-
+                    <br>
+                    <p>Are you customer? <a href="{{url('customer')}}">Customer</a></p>
                 </div>
                 <div class="showback">
                     @if(Session::has('error'))

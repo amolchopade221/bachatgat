@@ -59,6 +59,50 @@ class customer_controller extends Controller
             dd($e->getMessage());
         }
     }
+    public function close_account(Request $request,$id)
+    {
+        try {
+            $pin = $request->input('pin');
+            $admin_data = DB::select('SELECT * FROM `admin` Where pin=?',[$pin]);
+
+            if (count($admin_data) == 0) {
+                return back()->with('error', 'Pin Not Match.....');
+            }
+
+            DB::delete('DELETE FROM `bachat_monthly` WHERE `customer_id` = ?', [$id]);
+            DB::delete('DELETE FROM `loan` WHERE `customer_id` = ?', [$id]);
+            DB::delete('DELETE FROM `loan_monthly_status` WHERE `customer_id` = ?', [$id]);
+            DB::delete('DELETE FROM `loan_statement` WHERE `customer_id` = ?', [$id]);
+            DB::delete('DELETE FROM `statement` WHERE `customer_id` = ?', [$id]);
+
+            $customers_data = DB::select('SELECT * FROM `customers` Where id=?',[$id]);
+            foreach ($customers_data as $cust_data) {
+                if($cust_data->profile != 'default.jpg')
+                {
+                    unlink('profile/'.$cust_data->profile);
+                }
+            }
+            $today = Date('d-m-Y');
+            $check = DB::update('UPDATE `customers` SET `full_name`=?,`shop_name`=?,`balance`=?,`per_month_bachat`=?,`mobile_no`=?,`email`=?,`aadhaar`=?,`pan`=?,`address`=?,`profile`=?,`acc_open_date`=?,`acc_expire_date`=?,`pass`=?,`is_active`=?,`is_account_ready_to_reuse`=? WHERE id = ?',['Not Defined',null,0,0,0,'Not Defined',0,'Not Defined','Not Defined','default.jpg',$today,$today,000,0,1,$id]);
+
+            if ($check) {
+                return back()->with('message', 'Account Close Successfully.....');
+            } else {
+                return back()->with('error', 'Something Went Wrong.....');
+            }
+
+        } catch (Exception $e) {
+            dd($e->getMessage());
+        }
+    }
+    public function reuse_account($final_user_account_no)
+    {
+        try {
+            return view('admin.pages.new_cust', array('account_no' => $final_user_account_no, 'success_code' => 200));
+        } catch (Exception $e) {
+            dd($e->getMessage());
+        }
+    }
     // FUnction For Adding New Customer
     function add_new_customer(Request $request)
     {
@@ -112,7 +156,26 @@ class customer_controller extends Controller
         try {
             $customer_data = DB::select('SELECT * FROM customers WHERE `acc_no`=?', [$acount_no]);
             if (count($customer_data) > 0) {
-                return back()->with('message', 'Your Account Open Successfully.....');
+                foreach ($customer_data as $cust_data) {
+                    if(($cust_data ->is_account_ready_to_reuse )==1){
+                        $profile = time() . '.' . $request->photo->getClientOriginalExtension();
+                        $img = $request->photo->move(('profile'), $profile);
+                        if ($img) {
+                            $check = DB::update('UPDATE `customers` SET `full_name`=?,`shop_name`=?,`per_month_bachat`=?,`mobile_no`=?,`email`=?,`aadhaar`=?,`pan`=?,`address`=?,`profile`=?,`acc_open_date`=?,`acc_expire_date`=?,`pass`=?,`is_active`=?,`is_account_ready_to_reuse`=? WHERE acc_no = ?',
+                            [$full_name,$shop_name,$amount,$mobile,$email,$aadhaar,$pan,$address,$profile,$open_date,$expre_date,$pass,1,0,$acount_no]);
+                            if ($check) {
+                                return back()->with('message', 'Your Account Open Successfully.....');
+                            } else {
+                                return back()->with('error', 'Something Went Wrong.....');
+                            }
+                        } else {
+                            return back()->with('error', 'Image Storing Problem.....');
+                        }
+                    }else{
+                        return back()->with('error', 'Account number in use.....');
+                    }
+                }
+                $today = Date('d-m-Y');
             }
             $profile = time() . '.' . $request->photo->getClientOriginalExtension();
             $img = $request->photo->move(('profile'), $profile);

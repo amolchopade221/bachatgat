@@ -186,11 +186,11 @@
         <!--footer end-->
     </section>
     <script src="{{asset('lib/common-scripts.js')}}"></script>
-    <script src="lib/form-validation-script.js"></script>
+    <script src="{{asset('lib/form-validation-script.js')}}"></script>
 
 
-    <script type="text/javascript" src="lib/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-    <script src="lib/advanced-form-components.js"></script>
+    <script type="text/javascript" src="{{asset('lib/bootstrap-datepicker/js/bootstrap-datepicker.js')}}"></script>
+    <script src="{{asset('lib/advanced-form-components.js')}}"></script>
     <script>
     function myconfirmation() {
 

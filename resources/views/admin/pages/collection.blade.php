@@ -100,6 +100,14 @@
                                 </div>
                                 <div class="form-group">
                                     <label
+                                        class="col-lg-2 col-md-2 col-lg-offset-2 col-md-offset-2 control-label">Details</label>
+                                    <div class="col-lg-4 col-md-4">
+                                        <input type="text" placeholder="Details" name="details" id="details"
+                                            class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label
                                         class="col-lg-2 col-md-2 col-lg-offset-2 col-md-offset-2 control-label">Pin</label>
                                     <div class="col-lg-4 col-md-4">
                                         <input type="password" placeholder="Pin" name="con_pin" id="con_pin"

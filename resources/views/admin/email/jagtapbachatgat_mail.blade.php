@@ -39,7 +39,7 @@
         </p>
 
         <p>
-            <b> <a href="{{url('customer')}}">Click Here</a> </b> to Login on customer cashboard
+            <b> <a href="{{url('customer')}}">Click Here</a> </b> to Login on customer Dashboard
             and check your account
         </p>
         <p>

@@ -27,6 +27,8 @@
                     <br>
                     <button class="btn btn-theme btn-block" type="submit"><i class="fa fa-lock"></i>
                         Log In</button>
+                    <br>
+                    <p>Are you admin ? <a href="{{url('admin')}}"> Admin </a></p>
                 </div>
                 <div class="showback">
                     @if(Session::has('error'))

@@ -50,6 +50,14 @@ Route::get('/collection', function () {
     return view('admin.pages.collection');
 })->Middleware(admin_login::class);
 
+Route::get('/new_cust', [customer_controller::class, 'open_new_account'])->Middleware(admin_login::class);
+
+Route::post('/open_account', [customer_controller::class, 'add_new_customer'])->Middleware(admin_login::class);
+
+Route::post('/close_account/{id}', [customer_controller::class, 'close_account'])->Middleware(admin_login::class);
+
+Route::get('/reuse_account/{acc_no}', [customer_controller::class, 'reuse_account'])->Middleware(admin_login::class);
+
 Route::get("/monthly_expire", [loan_controller::class, 'monthly_expire'])->Middleware(admin_login::class);
 
 Route::get("/get_customer_data/{id}", [statement_controller::class, 'get_customer_info'])->Middleware(admin_login::class);
@@ -62,9 +70,7 @@ Route::get('/send_email', [EmailController::class, 'sendEmail'])->Middleware(sen
 
 Route::get("/todays_collection", [statement_controller::class, 'show_todays_collection'])->Middleware(admin_login::class);
 
-Route::get('/new_cust', [customer_controller::class, 'open_new_account'])->Middleware(admin_login::class);
-
-Route::post('/open_account', [customer_controller::class, 'add_new_customer'])->Middleware(admin_login::class);
+Route::get("/pending_loans", [loan_controller::class, 'show_pending_loans'])->Middleware(admin_login::class);
 
 Route::get('/customers', [customer_controller::class, 'get_customers'])->Middleware(admin_login::class);
 
@@ -90,13 +96,15 @@ Route::get("/give_a_loan/{id}", [loan_controller::class, 'give_a_new_loan'])->Mi
 
 Route::post("/submit_loan/{id}", [loan_controller::class, 'submit_loan_to_customer'])->Middleware(admin_login::class);
 
-Route::get("/current_month_status/{loan_no}/{id}/", [loan_controller::class, 'get_current_month_status'])->Middleware(admin_login::class);
-
 Route::get("/cancel_loan_transaction/{id}", [loan_controller::class, 'cancel_loan_transaction'])->Middleware(admin_login::class);
 
 Route::get("/loan_statement/{loan_no}/{id}/", [loan_controller::class, 'get_loan_statement'])->Middleware(admin_login::class);
 
 Route::get("/monthly_loan_statement/{loan_no}/{id}", [loan_controller::class, 'get_monthly_loan_statement'])->Middleware(admin_login::class);
+
+Route::get("/forgot_loan_collection_form/{id}", [loan_controller::class, 'get_collection_form_details'])->Middleware(admin_login::class);
+
+Route::post("/submit_forgot_loan_collection/{id}", [loan_controller::class, 'submit_forgot_loan_collection'])->Middleware(admin_login::class);
 
 Route::get("/collect_all_loan/{id}", [loan_controller::class, 'collect_all_loan_amount'])->Middleware(admin_login::class);
 
@@ -153,6 +161,10 @@ Route::get("/customer_loan_statement/{loan_no}/{id}/", [customer_loan_controller
 
 Route::get("/customer_monthly_loan_statement/{loan_no}/{id}", [customer_loan_controller::class, 'get_customer_monthly_loan_statement'])->Middleware(customer_login::class);
 
+
+Route::get('/customers_change_profile', [customer_setting_controller::class, 'customers_change_profile'])->Middleware(customer_login::class);
+
+Route::post('/customer_update_profile', [customer_setting_controller::class, 'customer_update_profile'])->Middleware(customer_login::class);
 
 Route::get('/customers_change_pass', [customer_setting_controller::class, 'customers_change_pass'])->Middleware(customer_login::class);
 

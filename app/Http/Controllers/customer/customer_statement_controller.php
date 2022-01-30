@@ -31,7 +31,7 @@ class customer_statement_controller extends Controller
 
         $loan_data = DB::select('SELECT * FROM `loan` WHERE `account_no`=? AND `status`=?', [$acc_no, 0]);
         $customer_data = DB::select('SELECT * FROM customers WHERE `id`=?', [$id]);
-        $monthly_statement_data = DB::select('SELECT * FROM `bachat_monthly` WHERE `customer_id`=? AND `is_received`=?', [$id, 1]);
+        $monthly_statement_data = DB::select('SELECT * FROM `bachat_monthly` WHERE `customer_id`=?', [$id]);
         if ((count($customer_data) == 0 || ($monthly_statement_data) == 0)) {
             return back()->with('error', 'Data Not Found.....');
         } else {
